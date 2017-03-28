@@ -56,18 +56,22 @@ def start(targetWeight):
 			data = device.read(endpoint.bEndpointAddress,endpoint.wMaxPacketSize)
 			raw_weight = data[4] + data[5] * 256
 			if data[2] == DATA_MODE_OUNCES:
-				ounces = raw_weight * 0.1
+				print"ounces"
+				ounces = (raw_weight * 0.1)/0.035274 
 				weight = ounces
 			if data[2] == DATA_MODE_GRAMS:
+				print"grams"
 				grams = raw_weight
-				weight = grams * 0.035274 # convert grams to ounces		
+				weight = grams 	
 		
 			if first == True:
 				weight = 0
 				first = False
 			if discrepCounter == 5:
 				return False 
-			if abs(prevWeight - weight) > 1:
+			
+			if abs(prevWeight - weight) > targetWeight:
+				print "dispcreipsf", prevWeight, " ",weight
 				discrepCounter = discrepCounter + 1
 				continue
 				
@@ -113,5 +117,4 @@ def start(targetWeight):
 print " first " 	
 
 		
-start(100)
 

@@ -10,17 +10,18 @@ import time
 
 
 def dispense(weight, targetWeight):
-	dispenseAmount = 0.4
+	dispenseAmount = 14
+	
 	
 	if (targetWeight - (weight)) >= dispenseAmount: 
-		GPIO.setmode(GPIO.BCM)
+		GPIO.setmode(GPIO.BOARD)
 		GPIO.setwarnings(False)
-		GPIO.setup(19,GPIO.OUT)
-		print "motor on"
-		GPIO.output(19, GPIO.HIGH)
+		GPIO.setup(36,GPIO.OUT)
+		print "motor on", targetWeight, " ", weight
+		GPIO.output(36, GPIO.HIGH)
 		time.sleep(0.5)
 		print "motor off"
-		GPIO.output(19,GPIO.LOW)
+		GPIO.output(36,GPIO.LOW)
 		return True
 		
 	return False

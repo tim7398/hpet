@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 import Model
 import boto3 #allow 
+import time
+import calendar
 from datetime import datetime
+from sets import Set
+import Read
 
-
+def convert():
+	timeNow = datetime.now()
+	timesNow = timeNow.hour*60+timeNow.minute
+	return timesNow
+	
 
 def main():
 	#when feeding, call readscale function
@@ -11,29 +19,34 @@ def main():
 	#RFID is constantly reading, if recieves an input, check to see if time to feed. 
 	#aws
 
-	dynamodb = boto3.resource('dynamodb',aws_access_key_id='AKIAICRCDD2R23GGIFQA', aws_secret_access_key='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',region_name='us-east-1',endpoint_url="https://dynamodb.us-east-1.amazonaws.com")
-	table=dynamodb.Table('hpet-mobilehub-642847546-Feeding')
-
-	time = datetime.now()
+	dynamodb = boto3.resource('dynamodb',aws_access_key_id='AKIAJSCDPW5BTHGCO7DQ', aws_secret_access_key='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',region_name='us-east-1',endpoint_url="https://dynamodb.us-east-1.amazonaws.com")
+	table=dynamodb.Table('hpet-mobilehub-642847546-User')
+	times = datetime.now()
 	resultant = True
 	first = False
+	print " hello " , convert()
 	while(True):
 		currentTime = datetime.now()
-		if (currentTime - time).seconds >= 5 or first == False:
-			response = table.get_item(Key={"userId": "us-east-1:608f7e84-e0f8-4d6a-8c74-51d74b00d8a2","petId": "bob"})
+		if (currentTime-times).seconds >= 5  or first == False:
+			response = table.get_item(Key={"userId": "us-east-1:78ba507d-40dc-44e6-8c55-6e6ddaa9d279"})
 			print ("Table status:", table.table_status)
-			print ('userID', response['Item']['time'])
-			string=str(response['Item']['time']).split()
-			datetime_object = datetime.strptime(str(response['Item']['time']),"%Y-%m-%d %H:%M:%S.%f")
-			print("hello", datetime_object.strftime("%H:%M:%S"))
+			print ('userID', list(response['Item']['currentFoodTimes']))
+			feedTime = Set(list(response['Item']['currentFoodTimes']))
+			targetWeight = (response['Item']['currentFoodAmounts'])
+			#datetime_object = datetime.strptime(str(response['Item']['time']),"%Y-%m-%d %H:%M:%S.%f")
 			first = True
-			time = datetime.now()
+			times = datetime.now()
+			print "date time now", calendar.timegm(time.gmtime())
+			
+			print " FEED TIME", feedTime, "NOW", convert()
+			print "food amount", targetWeight["Tim's DogFood1490724519292.03"]
+			
 
-		if(currentTime > datetime_object):
-			print"hello there world", currentTime.strftime("%H:%M:%S"), datetime_object.strftime("%H:%M:%S")
-			resultant=Model.model()
-		
+		if(convert() in feedTime):
+			resultant=Model.model(int(targetWeight["Tim's DogFood1490724519292.03"]))
+			Read.read(int(targetWeight["Tim's DogFood1490724519292.03"]))
 		if resultant == False:
+			print "end of the program"
 			break
 		
 
