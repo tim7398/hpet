@@ -19,7 +19,7 @@ def main():
 	#RFID is constantly reading, if recieves an input, check to see if time to feed. 
 	#aws
 
-	dynamodb = boto3.resource('dynamodb',aws_access_key_id='AKIAJSCDPW5BTHGCO7DQ', aws_secret_access_key='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',region_name='us-east-1',endpoint_url="https://dynamodb.us-east-1.amazonaws.com")
+	dynamodb = boto3.resource('dynamodb',aws_access_key_id='', aws_secret_access_key='',region_name='us-east-1',endpoint_url="https://dynamodb.us-east-1.amazonaws.com")
 	table=dynamodb.Table('hpet-mobilehub-642847546-User')
 	times = datetime.now()
 	resultant = True
